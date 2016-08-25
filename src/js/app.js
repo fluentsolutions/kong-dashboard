@@ -103,7 +103,16 @@ var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitiz
                         return null;
                     },
                     plugins: ['Kong', function (Kong) {
-                        return Kong.get('/plugins/enabled');
+                        return Kong.get('/plugins/enabled').then(function (result) {
+                            // Modified for Kong 0.9
+                            var enabledPlugins = [];
+                            angular.forEach(result.enabled_plugins, function(value, key) {
+                                if (value) {
+                                    enabledPlugins.push(key);
+                                }
+                            })
+                            return { "enabled_plugins": enabledPlugins };
+                        });
                     }],
                     apis: ['Kong', '$location', function(Kong) {
                         return Kong.get('/apis');
@@ -123,7 +132,16 @@ var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitiz
                         return Kong.get('/plugins/' + id);
                     }],
                     plugins: ['Kong', function (Kong) {
-                        return Kong.get('/plugins/enabled');
+                        return Kong.get('/plugins/enabled').then(function (result) {
+                            // Modified for Kong 0.9
+                            var enabledPlugins = [];
+                            angular.forEach(result.enabled_plugins, function(value, key) {
+                                if (value) {
+                                    enabledPlugins.push(key);
+                                }
+                            })
+                            return { "enabled_plugins": enabledPlugins };
+                        });
                     }],
                     apis: ['Kong', '$location', function(Kong) {
                         return Kong.get('/apis');
